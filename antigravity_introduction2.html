@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Antigravity AI 助手 — 完整教學文件</title>
+<style>
+  /* ===== Reset & Base ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+  body {
+    font-family: 'Segoe UI', 'Microsoft JhengHei', 'PingFang TC', sans-serif;
+    line-height: 1.8;
+    color: #1a1a2e;
+    background: #f8f9fc;
+  }
+
+  /* ===== Layout: Sidebar + Main ===== */
+  .page-layout {
+    display: flex;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  /* --- Sidebar --- */
+  .sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 1px solid #e2e8f0;
+    background: #ffffff;
+    padding: 24px 0;
+    z-index: 100;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+  .sidebar-title {
+    font-size: 14px; font-weight: 700; color: #0f172a;
+    padding: 0 20px 16px; border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 8px;
+  }
+  .sidebar-title span { color: #f59e0b; }
+
+  .sidebar-group-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; padding: 14px 20px 6px;
+  }
+  .sidebar-group-label.part1 { color: #3b82f6; }
+  .sidebar-group-label.part2 { color: #8b5cf6; }
+
+  .sidebar-link {
+    display: block; padding: 6px 20px 6px 28px;
+    font-size: 13px; color: #64748b; text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: all 0.2s ease;
+    line-height: 1.5;
+  }
+  .sidebar-link:hover {
+    color: #1e293b; background: #f1f5f9;
+    border-left-color: #cbd5e1;
+  }
+  .sidebar-link.active {
+    color: #1d4ed8; font-weight: 600;
+    background: #eff6ff;
+    border-left-color: #3b82f6;
+  }
+  .sidebar-link.sub {
+    padding-left: 40px; font-size: 12px;
+  }
+
+  /* --- Main Content --- */
+  .main-content {
+    flex: 1;
+    min-width: 0;
+    padding: 40px 48px;
+    max-width: 960px;
+  }
+
+  /* ===== Typography ===== */
+  h1 { font-size: 2rem; margin-bottom: 12px; color: #0f172a; }
+  h2 {
+    font-size: 1.6rem; margin: 48px 0 16px; color: #1e293b;
+    border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;
+  }
+  h3 { font-size: 1.3rem; margin: 36px 0 12px; color: #334155; }
+  h4 { font-size: 1.1rem; margin: 24px 0 8px; color: #475569; }
+  p { margin: 12px 0; }
+  strong { color: #0f172a; }
+  em { color: #475569; }
+  code {
+    background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+    padding: 2px 6px; font-size: 0.9em; font-family: 'Consolas', 'Courier New', monospace;
+    color: #7c3aed;
+  }
+  a { color: #3b82f6; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  hr { border: none; border-top: 1px solid #e2e8f0; margin: 32px 0; }
+  ul, ol { margin: 8px 0 8px 24px; }
+  li { margin: 4px 0; }
+  blockquote {
+    border-left: 4px solid #94a3b8; background: #f1f5f9;
+    padding: 12px 16px; margin: 16px 0; border-radius: 0 8px 8px 0;
+    color: #475569;
+  }
+
+  /* ===== Tables ===== */
+  table.data-table {
+    width: 100%; border-collapse: collapse; margin: 16px 0;
+    font-size: 0.95em;
+  }
+  table.data-table th {
+    background: #1e293b; color: #f8fafc; padding: 10px 14px;
+    text-align: left; font-weight: 600; border: 1px solid #334155;
+  }
+  table.data-table td {
+    padding: 10px 14px; border: 1px solid #e2e8f0; vertical-align: top;
+  }
+  table.data-table tr:nth-child(even) { background: #f8fafc; }
+  table.data-table tr:hover { background: #eef2ff; }
+
+  /* ===== Inline TOC Box ===== */
+  .toc-wrapper {
+    display: flex; gap: 20px; margin: 24px 0;
+  }
+  .toc-box {
+    flex: 1; background: #1e293b; border-radius: 12px; padding: 24px;
+    border: 1px solid #334155; color: #cbd5e1;
+  }
+  .toc-box .toc-label {
+    font-size: 13px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 12px;
+  }
+  .toc-box.part1 .toc-label { color: #60a5fa; }
+  .toc-box.part2 .toc-label { color: #a78bfa; }
+  .toc-box .toc-title {
+    font-size: 16px; font-weight: 700; color: #e2e8f0;
+    margin-bottom: 16px; padding-bottom: 12px;
+    border-bottom: 1px solid #334155;
+  }
+  .toc-item {
+    display: flex; padding: 7px 0; border-top: 1px solid rgba(255,255,255,0.06);
+    cursor: pointer; transition: background 0.15s;
+  }
+  .toc-item:first-child { border-top: none; }
+  .toc-item:hover { background: rgba(255,255,255,0.05); border-radius: 4px; }
+  .toc-item a { color: inherit; text-decoration: none; display: flex; width: 100%; }
+  .toc-num { width: 36px; color: #64748b; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+  .toc-text { color: #cbd5e1; font-size: 13px; }
+
+  /* ===== Callout / Alert Boxes ===== */
+  .callout {
+    border-radius: 8px; padding: 14px 18px; margin: 16px 0;
+    border-left: 4px solid; font-size: 0.95em;
+  }
+  .callout-green { background: #f0fdf4; border-color: #22c55e; color: #166534; }
+  .callout-green strong { color: #15803d; }
+  .callout-red { background: #fef2f2; border-color: #ef4444; color: #991b1b; }
+  .callout-red strong { color: #b91c1c; }
+  .callout-blue { background: #eff6ff; border-color: #3b82f6; color: #1e40af; }
+  .callout-blue strong { color: #1d4ed8; }
+  .callout-yellow { background: #fffbeb; border-color: #f59e0b; color: #92400e; }
+  .callout-yellow strong { color: #b45309; }
+
+  /* GitHub-style alerts */
+  .gh-alert {
+    border-radius: 8px; padding: 14px 18px; margin: 16px 0;
+    border-left: 4px solid; font-size: 0.95em;
+  }
+  .gh-alert-important { background: #faf5ff; border-color: #8b5cf6; color: #5b21b6; }
+  .gh-alert-important .gh-alert-title { color: #7c3aed; }
+  .gh-alert-tip { background: #f0fdf4; border-color: #22c55e; color: #166534; }
+  .gh-alert-tip .gh-alert-title { color: #16a34a; }
+  .gh-alert-title { font-weight: 700; margin-bottom: 6px; }
+
+  /* ===== Code Blocks ===== */
+  pre {
+    background: #1e293b; color: #e2e8f0; border-radius: 8px;
+    padding: 18px 20px; margin: 16px 0; overflow-x: auto;
+    font-family: 'Consolas', 'Courier New', monospace; font-size: 0.9em;
+    line-height: 1.6; border: 1px solid #334155;
+  }
+
+  /* ===== Mermaid ===== */
+  .mermaid {
+    margin: 20px 0; text-align: center;
+    background: #ffffff; border-radius: 8px; padding: 20px;
+    border: 1px solid #e2e8f0;
+  }
+
+  /* ===== File Tree ===== */
+  .file-tree {
+    background: #1e293b; color: #e2e8f0; border-radius: 8px;
+    padding: 18px 20px; margin: 16px 0;
+    font-family: 'Consolas', 'Courier New', monospace; font-size: 0.9em;
+    line-height: 1.8; border: 1px solid #334155; white-space: pre;
+  }
+
+  /* ===== Intro Lead ===== */
+  .lead {
+    font-size: 1.05em; color: #475569; border-left: 4px solid #3b82f6;
+    padding-left: 16px; margin: 16px 0;
+  }
+
+  /* ===== Mobile: Hide sidebar, show hamburger ===== */
+  .sidebar-toggle {
+    display: none;
+    position: fixed; top: 12px; left: 12px; z-index: 200;
+    width: 40px; height: 40px; border-radius: 8px;
+    background: #1e293b; color: white; border: none;
+    font-size: 20px; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    align-items: center; justify-content: center;
+  }
+  .sidebar-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.4); z-index: 99;
+  }
+
+  @media (max-width: 900px) {
+    .sidebar-toggle { display: flex; }
+    .sidebar {
+      position: fixed; left: -280px;
+      transition: left 0.3s ease;
+      box-shadow: 4px 0 16px rgba(0,0,0,0.1);
+    }
+    .sidebar.open { left: 0; }
+    .sidebar-overlay.open { display: block; }
+    .main-content { padding: 40px 20px; padding-top: 60px; }
+    .toc-wrapper { flex-direction: column; }
+    table.data-table { font-size: 0.85em; }
+    table.data-table td, table.data-table th { padding: 8px 10px; }
+  }
+
+  /* ===== Back to Top ===== */
+  .back-to-top {
+    position: fixed; bottom: 24px; right: 24px;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: #3b82f6; color: white; border: none;
+    font-size: 20px; cursor: pointer;
+    box-shadow: 0 2px 12px rgba(59,130,246,0.4);
+    opacity: 0; transform: translateY(10px);
+    transition: all 0.3s ease;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 50;
+  }
+  .back-to-top.visible { opacity: 1; transform: translateY(0); }
+  .back-to-top:hover { background: #2563eb; transform: translateY(-2px); }
+
+  /* ===== Progress Bar ===== */
+  .progress-bar {
+    position: fixed; top: 0; left: 0; height: 3px;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    z-index: 300; transition: width 0.1s;
+    width: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Mobile Toggle -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">☰</button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="page-layout">
+
+<!-- ==================== SIDEBAR ==================== -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-title"><span>⚡</span> Antigravity 教學文件</div>
+
+  <div class="sidebar-group-label part1">第一部分 — 基本介紹</div>
+  <a class="sidebar-link" href="#sec-1-1">1.1 什麼是 Antigravity？</a>
+  <a class="sidebar-link" href="#sec-1-2">1.2 模型選擇與差異</a>
+  <a class="sidebar-link" href="#sec-1-3">1.3 與 Gemini Canvas 的差異</a>
+  <a class="sidebar-link" href="#sec-1-4">1.4 工作模式（三階段）</a>
+  <a class="sidebar-link" href="#sec-1-5">1.5 實際操作教學</a>
+  <a class="sidebar-link" href="#sec-1-6">1.6 使用小技巧</a>
+
+  <div class="sidebar-group-label part2">第二部分 — Skills 系統</div>
+  <a class="sidebar-link" href="#sec-2-1">2.1 什麼是 Skills？</a>
+  <a class="sidebar-link" href="#sec-2-2">2.2 Skills 的核心價值</a>
+  <a class="sidebar-link" href="#sec-2-3">2.3 如何建立 MD 檔？</a>
+  <a class="sidebar-link" href="#sec-2-4">2.4 三大機制的格式與寫法</a>
+  <a class="sidebar-link" href="#sec-2-5">2.5 自訂系統三大機制</a>
+  <a class="sidebar-link" href="#sec-2-6">2.6 Skills 實戰範例</a>
+  <a class="sidebar-link" href="#sec-2-7">2.7 品檢 Skills 範例</a>
+
+  <div class="sidebar-group-label" style="color:#64748b">結語</div>
+  <a class="sidebar-link" href="#sec-conclusion">🎯 結語</a>
+</nav>
+
+<!-- ==================== MAIN CONTENT ==================== -->
+<div class="main-content">
+
+<!-- TITLE -->
+<h1>⚡ Antigravity AI 助手 — 完整教學文件</h1>
+<p class="lead"><strong>本文目標：</strong> 幫助你快速理解 Antigravity 的核心能力與 Skills 系統，並透過實際範例掌握使用方式，讓 AI 成為你真正的工作助手。</p>
+
+<hr>
+
+<!-- TOC -->
+<h2 id="sec-toc">📋 目錄</h2>
+
+<div class="toc-wrapper">
+  <div class="toc-box part1">
+    <div class="toc-label">第一部分</div>
+    <div class="toc-title">⚡ Antigravity 基本介紹</div>
+    <div class="toc-item"><a href="#sec-1-1"><span class="toc-num">1.1</span><span class="toc-text">什麼是 Antigravity？</span></a></div>
+    <div class="toc-item"><a href="#sec-1-2"><span class="toc-num">1.2</span><span class="toc-text">模型選擇與差異</span></a></div>
+    <div class="toc-item"><a href="#sec-1-3"><span class="toc-num">1.3</span><span class="toc-text">與 Gemini Canvas 的差異</span></a></div>
+    <div class="toc-item"><a href="#sec-1-4"><span class="toc-num">1.4</span><span class="toc-text">工作模式（三階段）</span></a></div>
+    <div class="toc-item"><a href="#sec-1-5"><span class="toc-num">1.5</span><span class="toc-text">實際操作教學</span></a></div>
+    <div class="toc-item"><a href="#sec-1-6"><span class="toc-num">1.6</span><span class="toc-text">使用小技巧</span></a></div>
+  </div>
+  <div class="toc-box part2">
+    <div class="toc-label">第二部分</div>
+    <div class="toc-title">🧠 Skills 系統介紹</div>
+    <div class="toc-item"><a href="#sec-2-1"><span class="toc-num">2.1</span><span class="toc-text">什麼是 Skills？</span></a></div>
+    <div class="toc-item"><a href="#sec-2-2"><span class="toc-num">2.2</span><span class="toc-text">Skills 的核心價值</span></a></div>
+    <div class="toc-item"><a href="#sec-2-3"><span class="toc-num">2.3</span><span class="toc-text">如何建立 MD 檔？</span></a></div>
+    <div class="toc-item"><a href="#sec-2-4"><span class="toc-num">2.4</span><span class="toc-text">三大機制的格式與寫法</span></a></div>
+    <div class="toc-item"><a href="#sec-2-5"><span class="toc-num">2.5</span><span class="toc-text">自訂系統三大機制</span></a></div>
+    <div class="toc-item"><a href="#sec-2-6"><span class="toc-num">2.6</span><span class="toc-text">Skills 實戰範例</span></a></div>
+    <div class="toc-item"><a href="#sec-2-7"><span class="toc-num">2.7</span><span class="toc-text">品檢 Skills 範例</span></a></div>
+  </div>
+</div>
+
+<hr>
+
+<!-- ==================== PART 1 ==================== -->
+<h2 id="sec-part1">第一部分：Antigravity 基本介紹</h2>
+
+<hr>
+
+<!-- 1.1 -->
+<h3 id="sec-1-1">1.1 🤖 什麼是 Antigravity？</h3>
+
+<p><strong>IDE（整合開發環境）</strong>就是一個把寫程式、除錯、執行整合在一起的開發工具，是一款能讓你用自然語言快速打造工具與自動化流程的 AI 開發平台。</p>
+
+<table class="data-table">
+  <thead><tr><th>能力</th><th>說明</th></tr></thead>
+  <tbody>
+    <tr><td>🖥️ <strong>讀寫檔案</strong></td><td>直接在你的電腦上建立、修改、刪除檔案</td></tr>
+    <tr><td>🌐 <strong>瀏覽網頁</strong></td><td>開啟瀏覽器、點擊按鈕、填寫表單、擷取網頁資訊</td></tr>
+    <tr><td>⚙️ <strong>撰寫程式</strong></td><td>自動產生完整的程式碼與應用程式</td></tr>
+    <tr><td>🔍 <strong>搜尋資訊</strong></td><td>即時搜尋網路、搜尋檔案內容</td></tr>
+    <tr><td>🎨 <strong>生成圖片</strong></td><td>根據文字描述產生圖片素材</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- 1.2 -->
+<h3 id="sec-1-2">1.2 🧠 模型選擇與差異</h3>
+
+<p>Antigravity 不綁定單一 AI 模型，可根據需求<strong>自由切換</strong>不同底層模型：</p>
+
+<table class="data-table">
+  <thead><tr><th>模型</th><th>供應商</th><th>特色</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Gemini 3.1 Pro</strong> 🆓</td><td>Google</td><td>Antigravity 原生模型、免費額度最高、整合最深</td></tr>
+    <tr><td><strong>Gemini 3 Flash</strong></td><td>Google</td><td>速度快、成本低</td></tr>
+    <tr><td><strong>Claude Sonnet 4.6</strong></td><td>Anthropic</td><td>平衡能力、擅長文件撰寫</td></tr>
+    <tr><td><strong>Claude Opus 4.6</strong> ⭐</td><td>Anthropic</td><td>業界頂尖品質輸出，程式碼與推理能力最強</td></tr>
+    <tr><td><strong>GPT-OSS-120b</strong></td><td>基於 OpenAI 技術的開源模型</td><td>開源生態、社群支持</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-green">
+  <strong>💡 怎麼選？</strong> 有兩種推薦策略：<br>
+  🆓 <strong>免費優先</strong> → <strong>Gemini 3.1 Pro</strong>（Antigravity 原生模型，個人 Gmail 免費使用，適合日常開發）<br>
+  ⭐ <strong>品質優先</strong> → <strong>Claude Opus 4.6</strong>（程式碼與邏輯推理能力業界頂尖，需額外費用）
+</div>
+
+<div class="mermaid">
+graph TD
+    A["你的需求"] --> B{"優先考量?"}
+    B -->|"免費 / 預設"| C["Gemini 3.1 Pro（免費）"]
+    B -->|"速度優先"| D["Gemini 3 Flash"]
+    B -->|"品質優先"| E["Claude Opus 4.6（頂尖）"]
+    B -->|"文件 / 寫作"| F["Claude Sonnet 4.6"]
+    B -->|"開源優先"| G["GPT-OSS-120b"]
+</div>
+
+<hr>
+
+<!-- 1.3 -->
+<h3 id="sec-1-3">1.3 ⚖️ 與 Gemini Canvas 的差異</h3>
+
+<div class="callout callout-red">
+  <strong>⚠️ 最核心的差異：單檔 vs 完整專案</strong><br>
+  Canvas 每次輸出<strong>單一 HTML 檔案</strong>；Antigravity 可以建立並管理<strong>完整多檔案專案結構</strong>，修改時只動需要改的那幾行。
+</div>
+
+<table class="data-table">
+  <thead><tr><th>比較項目</th><th style="text-align:center">Gemini Canvas</th><th style="text-align:center">Antigravity</th></tr></thead>
+  <tbody>
+    <tr><td>產出結構</td><td style="text-align:center">單一 HTML 檔案</td><td style="text-align:center">多檔案完整專案</td></tr>
+    <tr><td>後續修改</td><td style="text-align:center">重新生成整個檔案</td><td style="text-align:center">只改需要動的那幾行</td></tr>
+    <tr><td>讀取現有檔案</td><td style="text-align:center">❌</td><td style="text-align:center">✅ 讀懂你的現有程式碼再動手</td></tr>
+    <tr><td>操作電腦 / 瀏覽器</td><td style="text-align:center">❌</td><td style="text-align:center">✅ 可自動操作瀏覽器、執行指令</td></tr>
+    <tr><td>串接後端（Firebase 等）</td><td style="text-align:center">❌</td><td style="text-align:center">✅ 可建立完整前後端系統</td></tr>
+    <tr><td>多人共用 / 即時同步</td><td style="text-align:center">❌ 資料只在本機</td><td style="text-align:center">✅ 雲端資料庫、即時更新</td></tr>
+    <tr><td>登入 / 權限控管</td><td style="text-align:center">❌</td><td style="text-align:center">✅ 支援帳號系統與角色管理</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-green">
+  <strong>💡</strong> <strong>Canvas 是「用完即丟的便條紙」；Antigravity 是「能持續迭代的正式產品」。</strong>
+</div>
+
+<h4>💡 兩者可以搭配使用</h4>
+
+<pre>① 用 Canvas 快速產出基本架構（HTML 草稿）
+        ↓
+② 把檔案複製到本機，交給 Antigravity
+        ↓
+③ Antigravity 讀取現有程式碼，繼續疊加功能、串接後端、優化細節</pre>
+
+<hr>
+
+<!-- 1.4 -->
+<h3 id="sec-1-4">1.4 🔄 工作模式（三階段）</h3>
+
+<p>Antigravity 採用三階段工作流程來處理複雜任務：</p>
+
+<div class="mermaid">
+graph TD
+    A["規劃階段"] --> B["執行階段"]
+    B --> C["驗證階段"]
+    C -->|"發現問題"| B
+    C -->|"重大問題"| A
+</div>
+
+<table class="data-table">
+  <thead><tr><th>階段</th><th>AI 做什麼</th><th>你需要做什麼</th></tr></thead>
+  <tbody>
+    <tr><td>📝 <strong>PLANNING</strong></td><td>分析需求、設計方案</td><td>審核計畫、提出意見</td></tr>
+    <tr><td>⚡ <strong>EXECUTION</strong></td><td>動手寫程式、修改檔案</td><td>等待或觀察進度</td></tr>
+    <tr><td>✅ <strong>VERIFICATION</strong></td><td>測試成果、確認品質</td><td>驗收成果</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- 1.5 -->
+<h3 id="sec-1-5">1.5 🚀 實際操作教學</h3>
+
+<h4>情境一：製作個人記帳工具</h4>
+
+<div class="callout callout-blue">
+  <strong>📌 你只需要說：</strong><br>
+  <em>「幫我做一個記帳工具，可以輸入日期、金額、分類，自動算出每月花費統計」</em>
+</div>
+
+<p>Antigravity 會自動：</p>
+<ol>
+  <li>規劃網頁表單架構</li>
+  <li>建立 HTML / CSS / JavaScript 檔案</li>
+  <li>設計美觀的介面（深色主題、圖表統計）</li>
+  <li>加入分類篩選與月報功能</li>
+  <li>啟動本地伺服器讓你即時預覽（請用 localhost 幫我開啟這個 html）</li>
+</ol>
+
+<hr>
+
+<h4>情境二：製作 AI 風格證件照生成器</h4>
+
+<div class="callout callout-blue">
+  <strong>📌 你只需要說：</strong><br>
+  <em>「幫我做一個證件照生成器，上傳照片後可以選擇台系、日系、韓系三種風格，用 AI 自動套用對應的濾鏡與美感」</em>
+</div>
+
+<p>Antigravity 會自動：</p>
+<ol>
+  <li>建立照片上傳介面，支援拖曳上傳</li>
+  <li>提供三種風格選擇：
+    <ul>
+      <li>🇹🇼 <strong>台系</strong>：自然清爽、色調忠實、適合正式場合</li>
+      <li>🇯🇵 <strong>日系</strong>：高曝光、柔焦感、淡色調、膠卷質感</li>
+      <li>🇰🇷 <strong>韓系</strong>：白皙透亮、柔光美顏、寫真館氛圍感</li>
+    </ul>
+  </li>
+  <li>套用對應濾鏡（亮度、對比、色溫、柔化）即時預覽</li>
+  <li>三種風格並排展示，一鍵下載</li>
+</ol>
+
+<hr>
+
+<!-- 1.6 -->
+<h3 id="sec-1-6">1.6 💡 使用小技巧</h3>
+
+<div class="callout callout-green">
+  <strong>💡 與 Antigravity 溝通的黃金法則</strong>
+</div>
+
+<h4>✅ DO — 這樣說更有效</h4>
+
+<table class="data-table">
+  <thead><tr><th>原則</th><th>不好的說法 ❌</th><th>好的說法 ✅</th></tr></thead>
+  <tbody>
+    <tr><td><strong>描述「要什麼」</strong></td><td>「先建一個表格，第一欄放日期...」</td><td>「幫我做一個記帳工具，自動產生每月統計圖表」</td></tr>
+    <tr><td><strong>提供具體範例</strong></td><td>「幫我整理這些資料」</td><td>「把這份 Excel 的銷售資料，按月份分類統計，做成折線圖」</td></tr>
+    <tr><td><strong>善用「像 XXX 那樣」</strong></td><td>「做一個筆記工具」</td><td>「做一個像 Notion 那樣可以分頁的筆記工具」</td></tr>
+  </tbody>
+</table>
+
+<h4>🔁 分階段給予回饋</h4>
+
+<pre>讓 AI 做出初版 → 看看效果 → 提出修改意見 → 逐步完善</pre>
+
+<hr>
+
+<!-- ==================== PART 2 ==================== -->
+<h2 id="sec-part2">第二部分：Skills 系統介紹</h2>
+
+<hr>
+
+<!-- 2.1 -->
+<h3 id="sec-2-1">2.1 📚 什麼是 Skills？</h3>
+
+<div class="callout callout-red">
+  <strong>⚠️ 重點：</strong> <strong>Skills（技能）</strong> 是 Antigravity 最強大的功能之一——它讓你可以把<strong>自訂的專業知識</strong>教給 AI。
+</div>
+
+<p>想像你有一位非常聰明的新助理（Antigravity），但他剛入職，還不了解你公司的：</p>
+<ul>
+  <li>內部規範</li>
+  <li>常用工具的使用方式</li>
+  <li>專案的特殊需求</li>
+</ul>
+
+<p><strong>Skills</strong> 就是你給這位助理的「工作手冊」——寫好之後，他就能按照你的方式做事。</p>
+
+<hr>
+
+<!-- 2.2 -->
+<h3 id="sec-2-2">2.2 🏆 Skills 的核心價值</h3>
+
+<blockquote>把 2.1 那三件「助理不懂的事」，分別寫成工作手冊——他就全都懂了。</blockquote>
+
+<div class="mermaid">
+graph TD
+    A["📥 你的需求（一句話）"] --> B["📖 Skill 常用工具手冊"]
+    A --> C["📖 Skill 內部規範手冊"]
+    A --> D["📖 Skill 專案知識手冊"]
+    B --> E["✅ 按公司方式完成任務 不需重新交代"]
+    C --> E
+    D --> E
+</div>
+
+<table class="data-table">
+  <thead><tr><th>優勢</th><th>用「新助理」比喻來說</th></tr></thead>
+  <tbody>
+    <tr><td>♻️ <strong>可重複使用</strong></td><td>工作手冊寫一次，助理每次都照做，不用重複交代</td></tr>
+    <tr><td>👥 <strong>可分享</strong></td><td>整個團隊的助理都拿同一本手冊，標準一致</td></tr>
+    <tr><td>✏️ <strong>可迭代</strong></td><td>說「把第三條規則改成這樣」，助理馬上更新，立即生效</td></tr>
+    <tr><td>📐 <strong>標準化</strong></td><td>不管換哪位助理，產出品質都一樣穩定</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- 2.3 -->
+<h3 id="sec-2-3">2.3 📝 如何建立 MD 檔？</h3>
+
+<p>Skills 系統的所有設定檔都是 <strong><code>.md</code>（Markdown）檔案</strong>——一種純文字格式，不需要任何特殊軟體就能編輯。</p>
+
+<h4>方法一：手動建立（最基本）</h4>
+
+<table class="data-table">
+  <thead><tr><th>步驟</th><th>操作</th></tr></thead>
+  <tbody>
+    <tr><td>①</td><td>在資料夾中<strong>按右鍵 → 新增 → 文字文件</strong></td></tr>
+    <tr><td>②</td><td>將檔名改為你要的名稱，<strong>副檔名從 <code>.txt</code> 改成 <code>.md</code></strong>（例如 <code>rules.md</code>、<code>SKILL.md</code>）</td></tr>
+    <tr><td>③</td><td>用<strong>記事本、VS Code 或任何文字編輯器</strong>打開，直接寫入內容</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-red">
+  <strong>⚠️ 注意：</strong> 如果看不到副檔名，請先到檔案總管 → <strong>檢視 → 顯示 → 副檔名</strong>，打勾開啟。
+</div>
+
+<h4>方法二：請 Antigravity 幫你建（推薦 ⭐）</h4>
+
+<p>你完全不需要自己動手建檔——直接跟 Antigravity 說：</p>
+
+<div class="callout callout-blue">
+  <strong>📌 你只需要說：</strong><br>
+  <em>「幫我建立一個 rules.md，規定所有回覆用繁體中文、語氣專業友善」</em><br><br>
+  <em>「幫我建立一個 SKILL.md，功能是搜尋今日 AI 新聞並選出 2 篇最有話題性的」</em>
+</div>
+
+<p>Antigravity 會自動在正確的路徑建立檔案、寫好格式與內容，你只需要確認即可。</p>
+
+<div class="callout callout-green">
+  <strong>💡 結論：</strong> MD 檔就是純文字檔，換個副檔名而已。但最簡單的方式是<strong>直接請 Antigravity 幫你建</strong>，連格式都不用記。
+</div>
+
+<hr>
+
+<!-- 2.4 -->
+<h3 id="sec-2-4">2.4 📄 三大機制的格式與寫法</h3>
+
+<h4>📌 Rules — 全域規則</h4>
+
+<ul><li><strong>不管你現在要做什麼事，都先遵守這些基本規定</strong></li></ul>
+
+<pre># 全域行為規則
+
+- 所有回覆請使用繁體中文
+- 回覆風格應專業且友善，避免過於正式
+- 執行任何操作前，先確認使用者需求
+- 涉及刪除或覆蓋操作時，必須先徵詢確認</pre>
+
+<hr>
+
+<h4>⚡ Workflows — 任務流程</h4>
+
+<ul><li><strong>這件事要怎麼一步一步做</strong></li></ul>
+
+<pre>---
+description (描述): AI 新聞選題、改寫、封面圖產出的完整發布流程
+---
+
+1. 搜尋今日 AI 新聞，選出 2 篇最具話題性的文章
+2. 將選定文章改寫為可直接發布的原創成稿（含 SEO 欄位）
+3. 為每篇文章產出 2 組封面圖方向與提示詞，並生成封面圖
+4. 詢問是否需要同步存入文章資料庫</pre>
+
+<blockquote>💬 觸發方式：對 Antigravity 說 <code>/publish-news</code> 即可啟動完整新聞產線</blockquote>
+
+<hr>
+
+<h4>🧠 Skills — 專用能力 / 工具包</h4>
+
+<ul><li><strong>依照任務需求挑選專用技能</strong></li></ul>
+
+<pre>---
+name: 技能名稱
+description (描述): 這個技能做什麼（AI 根據此描述判斷是否取用）
+---
+
+# 詳細指令
+
+## 步驟一：...
+具體的操作說明</pre>
+
+<div class="callout callout-green">
+  <strong>💡 Skills 的觸發是自動的</strong> — 你不需要指定用哪個 Skill，AI 會根據需求描述自動比對並取用。同一需求可同時觸發多個 Skills。<br><br>
+  <strong>修改 Skill 也只要一句話</strong> — 對 Antigravity 說「幫我更新這個 Skill，加上 XXX 規則」，它會直接回寫並儲存對應的 <code>SKILL.md</code>，即時生效。
+</div>
+
+<hr>
+
+<!-- 2.5 -->
+<h3 id="sec-2-5">2.5 🗂️ 自訂系統三大機制總覽</h3>
+
+<p>Antigravity 的自訂能力由 <strong><code>.agents</code> 資料夾</strong> 統一管理：</p>
+
+<div class="file-tree">📁 .agents/                              ← 自訂系統根目錄
+├── 📄 rules.md                          ← 全域行為規則
+├── 📄 workflow.MD                       ← 完整工作流程定義
+└── 📁 skills/                           ← AI 自動判斷取用的技能
+    ├── 📁 ai-news-selector/
+    │   └── 📄 SKILL.md                  ← 搜尋與選題
+    ├── 📁 ai-news-rewriter-seo/
+    │   └── 📄 SKILL.md                  ← 改寫成稿與 SEO
+    └── 📁 blog-cover-brief-generator/
+        └── 📄 SKILL.md                  ← 產生封面圖方向</div>
+
+<table class="data-table">
+  <thead><tr><th>機制</th><th>檔案位置</th><th>觸發方式</th><th>用途</th></tr></thead>
+  <tbody>
+    <tr><td>🔴 <strong>Rules</strong></td><td><code>.agents/rules.md</code></td><td>每次對話<strong>自動套用</strong></td><td>語言、風格、命名規範</td></tr>
+    <tr><td>🟡 <strong>Workflows</strong></td><td><code>.agents/workflows/*.md</code></td><td><code>/指令名稱</code> 手動觸發，或 AI 自動判斷</td><td>固定步驟流程：部署、發布</td></tr>
+    <tr><td>🟣 <strong>Skills</strong></td><td>任意路徑的 <code>SKILL.md</code></td><td>AI <strong>自動判斷</strong>是否適用</td><td>專業知識：寫作風格、資料處理</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- 2.6 -->
+<h3 id="sec-2-6">2.6 🎯 Skills 實戰範例：AI 新聞產線</h3>
+
+<div class="gh-alert gh-alert-important">
+  <div class="gh-alert-title">⚠️ IMPORTANT</div>
+  Skills 的真正威力不在於「單一技能」，而在於 <strong>AI 會根據任務需求，自動在多個 Skills 之間切換取用</strong>。
+</div>
+
+<h4>情境：一句話啟動三個 Skill 協作</h4>
+
+<blockquote><em>「幫我搜尋今天的 AI 新聞，選 2 篇改寫成部落格文章，然後產生封面圖」</em></blockquote>
+
+<div class="mermaid">
+graph TD
+    A["👤 使用者需求<br/>搜尋新聞 → 改寫 → 產圖"] --> B["🔍 Skill ①<br/>ai-news-selector<br/>選題"]
+    B --> C["📝 Skill ②<br/>ai-news-rewriter-seo<br/>改寫成稿"]
+    C --> D["🎨 Skill ③<br/>blog-cover-brief-generator<br/>封面圖"]
+    D --> E["✅ 完成<br/>選題 + 文章 + 封面圖"]
+</div>
+
+<hr>
+
+<h4>Skill ① — <code>ai-news-selector</code>（選題）</h4>
+
+<pre>---
+name: ai-news-selector
+description: 當使用者要爬取今日新聞、挑選最吸睛的幾篇新聞時啟用。
+             此 Skill 專門負責搜尋、篩選與選題，不負責改寫或圖片生成。
+---
+
+## 目標
+從固定新聞來源中抓取當日新聞，選出最適合後續改寫的 2 篇文章。
+
+## 核心規則
+1. 只處理「當日發布」的文章
+2. 排除非正文頁、低價值頁面
+3. 依吸睛程度、話題性、資訊完整度綜合排序
+4. 輸出：原始標題、來源、連結、入選原因、摘要、建議關鍵字</pre>
+
+<h4>Skill ② — <code>ai-news-rewriter-seo</code>（改寫成稿）</h4>
+
+<pre>---
+name: ai-news-rewriter-seo
+description: 當使用者已提供完整新聞內容，並要求改寫成可直接發布的成稿時啟用。
+             不負責搜尋新聞或挑選題材。
+---
+
+## 目標
+將完整中文新聞轉為可直接發布的原創成稿，含 SEO 欄位。
+
+## 核心規則
+1. 保留可驗證事實，完成原創重述
+2. 不可逐句照抄、不可有 AI 口吻
+3. 主關鍵字需出現在標題、前 150 字、正文中
+4. 輸出：H1 標題、正文、參考資料、關鍵詞、SEO 網址/標題/敘述</pre>
+
+<h4>Skill ③ — <code>blog-cover-brief-generator</code>（封面圖）</h4>
+
+<pre>---
+name: blog-cover-brief-generator
+description: 當使用者已提供文章標題與內文，並要求產出封面圖方向時啟用。
+             不負責搜尋新聞或改寫全文。
+---
+
+## 目標
+為每篇文章產出 2 組 16:9 封面圖方向與圖片生成提示詞。
+
+## 核心規則
+1. 每篇文章 2 組方向，需有明顯差異
+2. 提示詞開頭必須包含 wide horizontal composition, 16:9 aspect ratio
+3. 產圖後需裁切為 16:9 並壓縮為 JPEG
+4. 輸出：方向名稱、視覺主軸、構圖描述、提示詞</pre>
+
+<hr>
+
+<h4>📊 有 Skills vs 沒有 Skills</h4>
+
+<table class="data-table">
+  <thead><tr><th></th><th>❌ 沒有 Skills</th><th>✅ 有 Skills</th></tr></thead>
+  <tbody>
+    <tr><td>選題標準</td><td>每次都要交代篩選規則</td><td>AI 自動套用 <code>ai-news-selector</code></td></tr>
+    <tr><td>文章風格</td><td>每次都要重新交代寫作規則</td><td>AI 自動套用 <code>ai-news-rewriter-seo</code></td></tr>
+    <tr><td>封面圖品質</td><td>每次都要描述設計原則</td><td>AI 自動套用 <code>blog-cover-brief-generator</code></td></tr>
+    <tr><td>產出一致性</td><td>隨對話不同而變化</td><td><strong>每次穩定一致</strong></td></tr>
+    <tr><td>操作複雜度</td><td>一大段指令</td><td><strong>一句話搞定</strong></td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- 2.7 -->
+<h3 id="sec-2-7">2.7 🔬 品檢 Skills 範例</h3>
+
+<table class="data-table">
+  <thead><tr><th>Skill 名稱</th><th>用途</th><th>觸發範例</th></tr></thead>
+  <tbody>
+    <tr><td><code>qa-knowledge-base-lookup</code></td><td>查詢品檢知識庫（比值、工具網址、規則）</td><td>「滿貫的紅鑽比值是多少？」</td></tr>
+    <tr><td><code>qa-test-account-lookup</code></td><td>查詢測試帳號、後台帳號、沙箱帳號</td><td>「幫我查 iGaming 測試帳號」</td></tr>
+    <tr><td><code>qa-uiux-advisor</code></td><td>分析遊戲截圖，從品檢角度給予 UI/UX 改善建議</td><td>「提供 UX 建議」</td></tr>
+    <tr><td><code>qa-testcase-suggester</code></td><td>掃描現有檢驗單，自動建議可能遺漏的額外測項</td><td>「提供補充測項」</td></tr>
+    <tr><td><code>qa-bug-reporter</code></td><td>口述問題後，AI 自動依規範格式整理並寫入文件</td><td>「幫我回報這個 Bug」</td></tr>
+  </tbody>
+</table>
+
+<div class="gh-alert gh-alert-tip">
+  <div class="gh-alert-title">💡 TIP</div>
+  這些 Skill 寫好之後：
+  <ul style="margin-top:6px">
+    <li>🤝 團隊成員<strong>共享同一套 Skills</strong>，統一品檢標準</li>
+    <li>🤖 AI <strong>自動判斷</strong>該用哪個 Skill，不需要手動切換</li>
+    <li>⚡ 一句話就能完成查帳號、查知識、取得建議、補充測項、回報 Bug</li>
+  </ul>
+</div>
+
+<hr>
+
+<!-- ==================== 結語 ==================== -->
+<h2 id="sec-conclusion">🎯 結語</h2>
+
+<p>Antigravity 的核心理念是讓每個人都成為「<strong>有 AI 幫手的超級工作者</strong>」。</p>
+
+<blockquote>
+  你不需要學程式，只需要清楚表達你的需求，AI 就能幫你實現。<br>
+  而 <strong>Skills 系統</strong>則讓你能把自己的專業知識「教」給 AI，實現真正的個人化工作助理。
+</blockquote>
+
+</div><!-- /.main-content -->
+</div><!-- /.page-layout -->
+
+<!-- Back to Top Button -->
+<button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+<!-- Mermaid JS -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'default',
+    flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' },
+    securityLevel: 'loose'
+  });
+</script>
+
+<!-- Scroll Spy + UI Scripts -->
+<script>
+(function() {
+  // --- Sidebar toggle (mobile) ---
+  var toggle = document.getElementById('sidebarToggle');
+  var sidebar = document.getElementById('sidebar');
+  var overlay = document.getElementById('sidebarOverlay');
+
+  toggle.addEventListener('click', function() {
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('open');
+  });
+  overlay.addEventListener('click', function() {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('open');
+  });
+
+  // Close sidebar on link click (mobile)
+  var sidebarLinks = document.querySelectorAll('.sidebar-link');
+  sidebarLinks.forEach(function(link) {
+    link.addEventListener('click', function() {
+      if (window.innerWidth <= 900) {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('open');
+      }
+    });
+  });
+
+  // --- Scroll Spy ---
+  var sections = [];
+  sidebarLinks.forEach(function(link) {
+    var id = link.getAttribute('href');
+    if (id && id.startsWith('#')) {
+      var el = document.querySelector(id);
+      if (el) sections.push({ id: id, el: el, link: link });
+    }
+  });
+
+  function updateActiveLink() {
+    var current = null;
+    // Use 40% of viewport as the "you are reading this section" line
+    var trigger = window.innerHeight * 0.4;
+
+    // Check if scrolled to the very bottom → highlight last section
+    var atBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 30);
+    if (atBottom && sections.length > 0) {
+      current = sections[sections.length - 1];
+    } else {
+      // Find the last section whose top has scrolled past the trigger line
+      for (var i = sections.length - 1; i >= 0; i--) {
+        var rect = sections[i].el.getBoundingClientRect();
+        if (rect.top <= trigger) {
+          current = sections[i];
+          break;
+        }
+      }
+    }
+
+    sidebarLinks.forEach(function(l) { l.classList.remove('active'); });
+    if (current) {
+      current.link.classList.add('active');
+      // Scroll sidebar to keep active link visible
+      var linkRect = current.link.getBoundingClientRect();
+      var sidebarRect = sidebar.getBoundingClientRect();
+      if (linkRect.top < sidebarRect.top + 60 || linkRect.bottom > sidebarRect.bottom - 20) {
+        current.link.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+    }
+  }
+
+  // --- Progress Bar ---
+  var progressBar = document.getElementById('progressBar');
+  function updateProgress() {
+    var scrollTop = window.scrollY;
+    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    var progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = progress + '%';
+  }
+
+  // --- Back to Top ---
+  var backToTop = document.getElementById('backToTop');
+  function updateBackToTop() {
+    if (window.scrollY > 400) {
+      backToTop.classList.add('visible');
+    } else {
+      backToTop.classList.remove('visible');
+    }
+  }
+  backToTop.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // --- Combined scroll handler (throttled) ---
+  var ticking = false;
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      requestAnimationFrame(function() {
+        updateActiveLink();
+        updateProgress();
+        updateBackToTop();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+
+  // Initial call
+  updateActiveLink();
+  updateProgress();
+})();
+</script>
+</body>
+</html>
